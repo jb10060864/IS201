@@ -1,0 +1,81 @@
+
+body {
+    background-color: #f4f4f4;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    color: #222;
+    margin: 0;
+    padding: 0;
+    text-align: center; 
+  }
+
+  body > * {
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+ 
+  h1 {
+    background-color: #3d3d3d;
+    color: rgb(255, 255, 255);
+    padding: 20px;
+  }
+  
+
+  h2 {
+    color: rgb(73, 120, 153);
+    border-bottom: 2px solid olive;
+    padding-bottom: 5px;
+    display: inline-block; 
+  }
+  
+ 
+  a {
+    color: rgb(109, 156, 182);
+    text-decoration: none;
+  }
+  
+  a:hover {
+    text-decoration: underline; 
+    color: #7389ba;
+  }
+  
+  img {
+    max-width: 70%;
+    height: auto;
+    display: block;
+    margin: 30px auto;
+  }
+  
+  .div1, .div2, .div3 {
+    padding: 20px;
+    margin: 10px auto;
+    background-color: whitesmoke;
+    border: 30px solid #c5c5c5da;
+    border-radius: 5px;
+    max-width: 800px;
+    text-align: center;
+  }
+  
+  /* Different div background for variety */
+  .div2 {
+    background-color: #d8dbdc;
+  }
+  
+  .div3 {
+    background-color: #e6e6e6;
+  }
+  
+  /* YouTube iframe styling */
+  iframe {
+    display: block;
+    margin: 20px auto;
+    border: none;
+    max-width: 100%;
+  }
+  
+  /* Style for ordered/unordered list */
+  ol, ul {
+    padding-left: 0;
+    list-style-position: inside;
+  }
+  
