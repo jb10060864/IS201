@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mood-Based Color Palette Generator</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      background: linear-gradient(45deg, #ff9a9e, #fad0c4, #fad0c4, #ff9a9e);
+      background-size: 400%;
+      animation: gradient 15s ease infinite;
+      min-height: 100vh;
+      font-family: 'Arial', sans-serif;
+    }
+    @keyframes gradient {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    .color-swatch {
+      transition: transform 0.3s ease;
+    }
+    .color-swatch:hover {
+      transform: scale(1.1);
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body class="flex items-center justify-center">
+  <div class="bg-white p-6 rounded-lg shadow-lg max-w-md w-full text-center">
+    <h1 class="text-2xl font-bold text-gray-800 mb-4">Mood-Based Color Palette Generator</h1>
+
+    <p class="text-gray-600 mb-4">Select your mood and generate a unique color palette!</p>
+    
+    <select id="moodSelect" class="w-full p-2 mb-4 border rounded-lg">
+      <option value="happy">Happy</option>
+      <option value="calm">Calm</option>
+      <option value="energetic">Energetic</option>
+      <option value="melancholic">Melancholic</option>
+    </select>
+    
+    <button id="generateBtn" class="w-full bg-indigo-600 text-white py-2 rounded-lg hover:bg-indigo-700 transition mb-4">Generate Palette</button>
+    
+    <div id="palette" class="grid grid-cols-5 gap-2 mb-4"></div>
+    
+    <button id="downloadBtn" class="w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 transition hidden">Download Palette</button>
+<br><br>
+    <a href="scratch.html">Click to go Back to Photography Page</a>
+    <br>
+    <a href="index.html">Click to go Back to Home Page</a>
+  </div>
+
+  <script>
+    const moodSelect = document.getElementById('moodSelect');
+    const generateBtn = document.getElementById('generateBtn');
+    const downloadBtn = document.getElementById('downloadBtn');
+    const paletteDiv = document.getElementById('palette');
+
+    // Mood to base color mapping (HSL format for easier manipulation)
+    const moodColors = {
+      happy: { h: 60, s: 80, l: 50 }, // Bright yellows
+      calm: { h: 200, s: 50, l: 60 }, // Soft blues
+      energetic: { h: 0, s: 90, l: 50 }, // Vibrant reds
+      melancholic: { h: 240, s: 40, l: 40 } // Deep purples
+    };
+
+    function generatePalette(mood) {
+      const baseColor = moodColors[mood];
+      const palette = [];
+
+      // Generate 5 colors by varying hue, saturation, and lightness
+      for (let i = 0; i < 5; i++) {
+        const h = (baseColor.h + i * 10 + Math.random() * 20) % 360;
+        const s = Math.min(100, baseColor.s + (Math.random() * 20 - 10));
+        const l = Math.min(90, Math.max(20, baseColor.l + (Math.random() * 20 - 10)));
+        const hex = hslToHex(h, s, l);
+        palette.push(hex);
+      }
+      return palette;
+    }
+
+    function hslToHex(h, s, l) {
+      l /= 100;
+      const a = s * Math.min(l, 1 - l) / 100;
+      const f = n => {
+        const k = (n + h / 30) % 12;
+        const color = l - a * Math.max(Math.min(k - 3, 9 - k, 1), -1);
+        return Math.round(255 * color).toString(16).padStart(2, '0');
+      };
+      return `#${f(0)}${f(8)}${f(4)}`;
+    }
+
+    function displayPalette(colors) {
+      paletteDiv.innerHTML = '';
+      colors.forEach(color => {
+        const swatch = document.createElement('div');
+        swatch.className = 'color-swatch h-16 rounded-lg relative';
+        swatch.style.backgroundColor = color;
+        const hexLabel = document.createElement('span');
+        hexLabel.className = 'absolute bottom-1 left-1 text-xs text-white bg-black bg-opacity-50 px-1 rounded';
+        hexLabel.textContent = color;
+        swatch.appendChild(hexLabel);
+        paletteDiv.appendChild(swatch);
+      });
+      downloadBtn.classList.remove('hidden');
+    }
+
+    function downloadPalette(colors) {
+      const canvas = document.createElement('canvas');
+      canvas.width = 500;
+      canvas.height = 100;
+      const ctx = canvas.getContext('2d');
+
+      // Draw each color as a vertical stripe
+      colors.forEach((color, i) => {
+        ctx.fillStyle = color;
+        ctx.fillRect(i * 100, 0, 100, 100);
+      });
+
+      // Create download link
+      const link = document.createElement('a');
+      link.download = 'palette.png';
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+    }
+
+    generateBtn.addEventListener('click', () => {
+      const mood = moodSelect.value;
+      const palette = generatePalette(mood);
+      displayPalette(palette);
+    });
+
+    downloadBtn.addEventListener('click', () => {
+      const mood = moodSelect.value;
+      const palette = generatePalette(mood);
+      downloadPalette(palette);
+    });
+
+    // Generate initial palette on page load
+    const initialPalette = generatePalette(moodSelect.value);
+    displayPalette(initialPalette);
+  </script>
+</body>
+</html>
